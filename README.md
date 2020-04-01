@@ -10,27 +10,38 @@ For each of the following topics, please answer each of the questions. You can u
 ### Questions
 
 1. What is the role of a join table in a many-to-many relationship?
-
+ joining table is a table that sits between the two other tables of a many-to-many relationship. Its purpose is to store a record for each of the combinations of these other two tables.
 
 2. What two columns must be present in a join table?
-
+ two id each id for the one table
 
 3. Given the example below, edit the code to define a has many :through relationship.
 
     ```ruby
     class Customer < ActiveRecord::Base
+     has_many :purchases
+     has_many :Products, through: :purchases
     end
 
     class Product < ActiveRecord::Base
+    has_many :purchases
+    has_many :Customers, through: :purchases
     end
 
     class Purchase < ActiveRecord::Base
+      belongs_to :customer
+      belongs_to :Product
     end
     ```
 
 
 4. Based on #3, give an example of associating two instances via the join model.
+customer_one = Customer.first
+Bag = customer_one.Product.new
+Bag.title = "Bag"
 
+Bag.save
+customer_one.Product
 
 
 ## Devise
@@ -40,16 +51,20 @@ For each of the following topics, please answer each of the questions. You can u
 ### Questions
 
 1. What does the `current_user` method that the Devise gem provides?
-
+The current_user method , whose purpose is self-explanatory, simply returns the model class relating to the signed in user. It returns nil if a user has not, as yet, signed in.
 
 2. What does the `authenticate_user!` method that the Devise gem provides?
+The authenticate_user! class method (controller only), ensures a logged in user is available to all, or a specified set of controller actions
 
 
 3. Write a signout link using the `link_to` rails helper and a devise path.
-
+  <% if user_signed_in? %>
+        <li><%= link_to 'Sign Out', destroy_user_session_path, method: :delete %></li>
+      <% end %>
+        </ul>
 
 4. How do I generate a devise model in the terminal?
-
+  rails generate device:install 
 
 5. What are the trade offs for using a gem for authentication over a handrolled solution? (no real right answer)
 
